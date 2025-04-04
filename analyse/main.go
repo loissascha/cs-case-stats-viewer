@@ -31,9 +31,10 @@ func main() {
 	unlocks_count := 0
 	unlocks_count = len(unlocks)
 
-	fmt.Println("You unlocked", unlocks_count, "cases!")
-
 	analyseCaseTypes(&unlocks)
+	fmt.Println("")
+	fmt.Println("You unlocked", unlocks_count, "cases in total!")
+	fmt.Println("")
 	analyseSkinRarities(&unlocks, &skins)
 
 	// debug: print out all the possible rarities
