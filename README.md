@@ -20,10 +20,10 @@ log in with your steam and wait for the data extractor to finish (it will take s
 
 the extracted data will be located inside the output folder
 
-## Usage Analyser: 
+## Usage Analyser:
 
-Download the latest binary for the analyser from the Releases page. 
+Download the latest binary for the analyser from the [Releases](https://github.com/loissascha/cs-case-stats-viewer/releases) page.
 
 Make sure to put the extracted 'unlocked_container.json' file from the Extractor in the same folder as the downloaded binary (do not rename the file).
 
-Run the analyser from a terminal with `./analyser` 
+Run the analyser from a terminal with `./analyser`
