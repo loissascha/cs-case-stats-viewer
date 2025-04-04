@@ -4,10 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type ContainerUnlock struct {
-	Date string `json:"date"`
+	Date        string `json:"date"`
+	Time        string `json:"time"`
+	Description string `json:"description"`
+	Items       []Item `json:"items"`
+}
+
+type Item struct {
+	PlusMinus string `json:"plusMinus"`
+	Name      string `json:"name"`
 }
 
 func main() {
@@ -18,8 +27,40 @@ func main() {
 
 	var unlocks []ContainerUnlock
 
+	unlocks_count := 0
+
 	json.Unmarshal(data, &unlocks)
-	fmt.Println("You unlocked", len(unlocks), "cases!")
+	unlocks_count = len(unlocks)
+
+	fmt.Println("You unlocked", unlocks_count, "cases!")
+
+	analyseCaseTypes(&unlocks)
+}
+
+func analyseCaseTypes(unlocks *[]ContainerUnlock) {
+	result := make(map[string]int)
+	for _, unlock := range *unlocks {
+		for _, item := range unlock.Items {
+			if item.PlusMinus != "-" {
+				continue
+			}
+			itemName := item.Name
+			if strings.Contains(itemName, "Key") {
+				itemName = strings.Replace(itemName, "Key", "", -1)
+			}
+			itemName = strings.TrimSpace(itemName)
+			v, ok := result[itemName]
+			if ok {
+				result[itemName] = v + 1
+			} else {
+				result[itemName] = 1
+			}
+		}
+	}
+
+	for i, v := range result {
+		fmt.Println("You opened the case", i, "for", v, "times")
+	}
 }
 
 // [
