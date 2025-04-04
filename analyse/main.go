@@ -74,7 +74,7 @@ func analyseCaseTypes(unlocks *[]ContainerUnlock) {
 	})
 
 	for _, item := range items {
-		fmt.Println("You opened the case", item.key, "for", item.value, "times")
+		fmt.Println("You opened", item.key, item.value, "times")
 	}
 }
 
