@@ -10,18 +10,25 @@ async function scrapeWebsite() {
             "--no-sandbox",
             "--disable-setuid-sandbox",
             "--ozone-platform=wayland",
+            "--lang=en-US,en",
         ],
     }); // Set headless to false for debugging
     const page = await browser.newPage();
+    await page.setExtraHTTPHeaders({
+        "Accept-Language": "en-US,en;q=0.9",
+    });
     const steamId = process.env.STEAM_ID;
     console.log("SteamID: " + steamId);
+    await page.goto(
+        `https://steamcommunity.com/profiles/${steamId}/inventoryhistory?l=english`,
+    ); // Change this to your target URL
+    await page.waitForSelector("#inventory_history_table", { timeout: 120000 });
     await page.goto(
         `https://steamcommunity.com/profiles/${steamId}/inventoryhistory?l=english`,
     ); // Change this to your target URL
 
     while (true) {
         await page.waitForSelector("#inventory_history_table", { timeout: 120000 });
-
         const trades = await page.evaluate(() => {
             const tradeRows = document.querySelectorAll(".tradehistoryrow");
             return Array.from(tradeRows).map((row) => {
