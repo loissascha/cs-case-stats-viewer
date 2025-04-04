@@ -14,9 +14,13 @@ clone this repository `git clone https://github.com/loissascha/cs-case-stats-vie
 
 cd into extractor folder `cd cs-case-stats-viewer/extractor`
 
-start container. If you have docker installed: `./docker.sh`, if you have podman installed: `./podman.sh`
+run `cp .env.example .env`
 
-log in with your steam and wait for the data extractor to finish (it will take some time! The browser will close when it's done.)
+edit the .env file and change the STEAM_ID variable to your steam id
+
+start container. If you have docker installed: `./docker.sh`, if you have podman installed: `./podman.sh` (starting process might take a while!)
+
+log in with your steam and wait for the data extractor to finish (it will take some time! The browser will close when it's done.) (it might show an error when it's finished, this does not mean it failed!)
 
 the extracted data will be located inside the output folder
 
