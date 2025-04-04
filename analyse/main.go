@@ -33,7 +33,7 @@ func main() {
 
 	analyseCaseTypes(&unlocks)
 	fmt.Println("")
-	fmt.Println("You unlocked", unlocks_count, "cases in total!")
+	fmt.Println("\033[1mYou unlocked", unlocks_count, "cases in total!\033[0m")
 	fmt.Println("")
 	analyseSkinRarities(&unlocks, &skins)
 
@@ -108,19 +108,19 @@ func analyseSkinRarities(unlocks *[]ContainerUnlock, skins *[]Skin) {
 	}
 
 	uc := len(*unlocks)
-	printRarityCountAndPercentage("White", white, uc)
-	printRarityCountAndPercentage("Light Blue", lightBlue, uc)
-	printRarityCountAndPercentage("Blue", blue, uc)
-	printRarityCountAndPercentage("Purple", purple, uc)
-	printRarityCountAndPercentage("Pink", pink, uc)
-	printRarityCountAndPercentage("Red", red, uc)
-	printRarityCountAndPercentage("Orange", orange, uc)
-	printRarityCountAndPercentage("Gold", gold, uc)
+	printRarityCountAndPercentage("White", white, uc, "\033[37m")
+	printRarityCountAndPercentage("Light Blue", lightBlue, uc, "\033[36m")
+	printRarityCountAndPercentage("Blue", blue, uc, "\033[34m")
+	printRarityCountAndPercentage("Purple", purple, uc, "\033[35m")
+	printRarityCountAndPercentage("Pink", pink, uc, "\033[38;5;13m")
+	printRarityCountAndPercentage("Red", red, uc, "\033[31m")
+	printRarityCountAndPercentage("Orange", orange, uc, "\033[38;5;214m")
+	printRarityCountAndPercentage("Gold", gold, uc, "\033[38;5;220m")
 }
 
-func printRarityCountAndPercentage(colorText string, count int, maxCount int) {
+func printRarityCountAndPercentage(colorText string, count int, maxCount int, color string) {
 	percentage := (float64(count) / float64(maxCount)) * 100
-	fmt.Printf("%s: %v/%v (%.2f%%)\n", colorText, count, maxCount, percentage)
+	fmt.Printf("%s%s: %v/%v (%.2f%%)\033[0m\n", color, colorText, count, maxCount, percentage)
 }
 
 func getSkinRarity(name string, skins *[]Skin) string {
