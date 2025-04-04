@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -24,6 +25,9 @@ type kv struct {
 	key   string
 	value int
 }
+
+//go:embed skins.json
+var skinsJson []byte
 
 func main() {
 	unlocks := readUserData("unlocked_container.json")
@@ -237,13 +241,13 @@ type SkinCategory struct {
 }
 
 func readSkinsJson() []Skin {
-	data, err := os.ReadFile("skins.json")
-	if err != nil {
-		panic(err)
-	}
+	// data, err := os.ReadFile("skins.json")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	var skins []Skin
-	json.Unmarshal(data, &skins)
+	json.Unmarshal(skinsJson, &skins)
 	return skins
 }
 
