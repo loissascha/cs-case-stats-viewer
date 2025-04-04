@@ -4,9 +4,9 @@ You can use this script(s) to extract and analyse all your case opening stats fr
 
 ## Requirements:
 
-Currently the docker/podman run commands expect you to be running Linux + Wayland. If you want to run it on different systems you'll have to adjust the docker/podman run command within the docker.sh/podman.sh files!
-
 To use the extractor you either need docker or podman installed on your system. If you don't know how install either of them on your system please check their documentation.
+
+Currently the docker/podman run commands expect you to be running Linux + Wayland. If you want to run it on different systems you'll have to adjust the docker/podman run command within the docker.sh/podman.sh files!
 
 ## Usage Extractor:
 
