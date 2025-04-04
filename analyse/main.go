@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"slices"
 	"sort"
 	"strings"
 )
@@ -37,16 +36,61 @@ func main() {
 	analyseCaseTypes(&unlocks)
 
 	// debug: print out all the possible rarities
-	rarities := []string{}
-	for _, skin := range skins {
-		if slices.Contains(rarities, skin.Rarity.Name) {
-			continue
-		}
-		rarities = append(rarities, skin.Rarity.Name)
-	}
-	fmt.Println(rarities)
+	// rarities := []string{}
+	// for _, skin := range skins {
+	// 	if slices.Contains(rarities, skin.Rarity.Name) {
+	// 		continue
+	// 	}
+	// 	rarities = append(rarities, skin.Rarity.Name)
+	// }
+	// fmt.Println(rarities)
 	////
 
+	gotRarities := make(map[string]int)
+	for _, unlock := range unlocks {
+		for _, item := range unlock.Items {
+			if item.PlusMinus != "+" {
+				continue
+			}
+
+			// this is what the user got out of it!
+			r := getSkinRarity(item.Name, &skins)
+			ra, ok := gotRarities[r]
+			if ok {
+				gotRarities[r] = ra + 1
+			} else {
+				gotRarities[r] = 1
+			}
+		}
+	}
+	fmt.Println(gotRarities)
+
+}
+
+func getSkinRarity(name string, skins *[]Skin) string {
+	if strings.Contains(name, "StatTrak™") {
+		name = strings.Replace(name, "StatTrak™", "", -1)
+		name = strings.TrimSpace(name)
+	}
+	if strings.Contains(name, "Souvenir") {
+		name = strings.Replace(name, "Souvenir", "", -1)
+		name = strings.TrimSpace(name)
+	}
+	if strings.Contains(name, "Sticker") {
+		return "Sticker"
+	}
+	if strings.Contains(name, "Patch") {
+		return "Patch"
+	}
+	if strings.Contains(name, "Graffiti") {
+		return "Graffiti"
+	}
+	for _, skin := range *skins {
+		if skin.Name == name {
+			return skin.Rarity.Name
+		}
+	}
+	panic("Unkown Rarity for skin: " + name)
 }
 
 func readUserData(filepath string) []ContainerUnlock {
@@ -57,7 +101,29 @@ func readUserData(filepath string) []ContainerUnlock {
 
 	var unlocks []ContainerUnlock
 	json.Unmarshal(data, &unlocks)
-	return unlocks
+	cleanedUnlocks := []ContainerUnlock{}
+	for _, v := range unlocks {
+		skippedUnlocke := false
+		for _, i := range v.Items {
+			if i.PlusMinus != "+" {
+				continue
+			}
+			if strings.Contains(i.Name, "Sticker") {
+				skippedUnlocke = true
+			}
+			if strings.Contains(i.Name, "Graffiti") {
+				skippedUnlocke = true
+			}
+			if strings.Contains(i.Name, "Patch") {
+				skippedUnlocke = true
+			}
+		}
+		if skippedUnlocke {
+			continue
+		}
+		cleanedUnlocks = append(cleanedUnlocks, v)
+	}
+	return cleanedUnlocks
 }
 
 func analyseCaseTypes(unlocks *[]ContainerUnlock) {
