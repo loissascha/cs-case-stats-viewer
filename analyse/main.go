@@ -92,6 +92,9 @@ func getSkinRarity(name string, skins *[]Skin) string {
 	}
 	for _, skin := range *skins {
 		if skin.Name == name {
+			if skin.Category.Name == "Knives" {
+				return "Extraordinary"
+			}
 			return skin.Rarity.Name
 		}
 	}
@@ -167,14 +170,19 @@ func analyseCaseTypes(unlocks *[]ContainerUnlock) {
 }
 
 type Skin struct {
-	Name   string     `json:"name"`
-	Rarity SkinRarity `json:"rarity"`
+	Name     string       `json:"name"`
+	Rarity   SkinRarity   `json:"rarity"`
+	Category SkinCategory `json:"category"`
 }
 
 type SkinRarity struct {
 	Id    string `json:"id"`
 	Name  string `json:"name"`
 	Color string `json:"color"`
+}
+
+type SkinCategory struct {
+	Name string `json:"name"`
 }
 
 func readSkinsJson() []Skin {
