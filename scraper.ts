@@ -2,7 +2,16 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 
 async function scrapeWebsite() {
-    const browser = await puppeteer.launch({ headless: false, timeout: 120000 }); // Set headless to false for debugging
+    const browser = await puppeteer.launch({
+        headless: false,
+        timeout: 120000,
+        executablePath: "/usr/bin/chromium",
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--ozone-platform=wayland",
+        ],
+    }); // Set headless to false for debugging
     const page = await browser.newPage();
     await page.goto(
         "https://steamcommunity.com/profiles/76561198080078959/inventoryhistory",
@@ -59,7 +68,7 @@ async function scrapeWebsite() {
             trade.description.includes("Unlocked a container"),
         );
         fs.writeFileSync(
-            "unlocked_container.json",
+            "/app/output/unlocked_container.json",
             JSON.stringify(unlockedContainers, null, 2),
             "utf-8",
         );

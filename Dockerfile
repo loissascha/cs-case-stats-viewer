@@ -36,7 +36,7 @@ COPY . .
 RUN npm run build
 
 # Let Puppeteer know it’s running in Docker
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable \
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     NODE_ENV=production
 
