@@ -45,22 +45,9 @@ var __async = (__this, __arguments, generator) => {
 // scraper.ts
 var import_puppeteer = __toESM(require("puppeteer"));
 var import_fs = __toESM(require("fs"));
-var import_path = __toESM(require("path"));
-var chromiumPath = import_path.default.join(
-  __dirname,
-  "chromium",
-  "chromium",
-  "linux-135.0.7049.42",
-  "chrome-linux64",
-  "chrome"
-);
 function scrapeWebsite() {
   return __async(this, null, function* () {
-    const browser = yield import_puppeteer.default.launch({
-      headless: false,
-      timeout: 12e4,
-      executablePath: chromiumPath
-    });
+    const browser = yield import_puppeteer.default.launch({ headless: false, timeout: 12e4 });
     const page = yield browser.newPage();
     yield page.goto(
       "https://steamcommunity.com/profiles/76561198080078959/inventoryhistory"
