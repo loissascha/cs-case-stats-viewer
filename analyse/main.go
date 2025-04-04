@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -17,6 +18,11 @@ type ContainerUnlock struct {
 type Item struct {
 	PlusMinus string `json:"plusMinus"`
 	Name      string `json:"name"`
+}
+
+type kv struct {
+	key   string
+	value int
 }
 
 func main() {
@@ -58,11 +64,21 @@ func analyseCaseTypes(unlocks *[]ContainerUnlock) {
 		}
 	}
 
-	for i, v := range result {
-		fmt.Println("You opened the case", i, "for", v, "times")
+	var items []kv
+	for key, value := range result {
+		items = append(items, kv{key: key, value: value})
+	}
+
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].value < items[j].value
+	})
+
+	for _, item := range items {
+		fmt.Println("You opened the case", item.key, "for", item.value, "times")
 	}
 }
 
+// example data
 // [
 //   {
 //     "date": "3 Apr, 2025",
