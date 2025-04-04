@@ -61,9 +61,9 @@ async function scrapeWebsite() {
                 return { date, time, description, items };
             });
         });
-        trades.forEach((trade) => {
-            console.log(trade);
-        });
+        // trades.forEach((trade) => {
+        //     console.log(trade);
+        // });
         const unlockedContainers = trades.filter((trade) =>
             trade.description.includes("Unlocked a container"),
         );
@@ -85,7 +85,7 @@ async function scrapeWebsite() {
             await page.waitForFunction(
                 (initialCount) =>
                     document.querySelectorAll(".tradehistoryrow").length > initialCount,
-                { timeout: 15000 }, // Increase timeout if Steam is slow
+                { timeout: 30000 }, // Increase timeout if Steam is slow
                 initialRowCount,
             );
             console.log("new history loaded!");
