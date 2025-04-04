@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 )
@@ -34,27 +35,31 @@ func main() {
 	fmt.Println("You unlocked", unlocks_count, "cases!")
 
 	analyseCaseTypes(&unlocks)
+	analyseSkinRarities(&unlocks, &skins)
 
 	// debug: print out all the possible rarities
-	// rarities := []string{}
-	// for _, skin := range skins {
-	// 	if slices.Contains(rarities, skin.Rarity.Name) {
-	// 		continue
-	// 	}
-	// 	rarities = append(rarities, skin.Rarity.Name)
-	// }
-	// fmt.Println(rarities)
+	rarities := []string{}
+	for _, skin := range skins {
+		if slices.Contains(rarities, skin.Rarity.Name) {
+			continue
+		}
+		rarities = append(rarities, skin.Rarity.Name)
+	}
+	fmt.Println(rarities)
 	////
 
+}
+
+func analyseSkinRarities(unlocks *[]ContainerUnlock, skins *[]Skin) {
 	gotRarities := make(map[string]int)
-	for _, unlock := range unlocks {
+	for _, unlock := range *unlocks {
 		for _, item := range unlock.Items {
 			if item.PlusMinus != "+" {
 				continue
 			}
 
 			// this is what the user got out of it!
-			r := getSkinRarity(item.Name, &skins)
+			r := getSkinRarity(item.Name, skins)
 			ra, ok := gotRarities[r]
 			if ok {
 				gotRarities[r] = ra + 1
@@ -90,7 +95,7 @@ func getSkinRarity(name string, skins *[]Skin) string {
 			return skin.Rarity.Name
 		}
 	}
-	panic("Unkown Rarity for skin: " + name)
+	return "Unknown"
 }
 
 func readUserData(filepath string) []ContainerUnlock {
