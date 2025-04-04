@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 )
@@ -26,21 +27,37 @@ type kv struct {
 }
 
 func main() {
-	data, err := os.ReadFile("unlocked_container.json")
-	if err != nil {
-		panic(err)
-	}
-
-	var unlocks []ContainerUnlock
-
+	unlocks := readUserData("unlocked_container.json")
+	skins := readSkinsJson()
 	unlocks_count := 0
-
-	json.Unmarshal(data, &unlocks)
 	unlocks_count = len(unlocks)
 
 	fmt.Println("You unlocked", unlocks_count, "cases!")
 
 	analyseCaseTypes(&unlocks)
+
+	// debug: print out all the possible rarities
+	rarities := []string{}
+	for _, skin := range skins {
+		if slices.Contains(rarities, skin.Rarity.Name) {
+			continue
+		}
+		rarities = append(rarities, skin.Rarity.Name)
+	}
+	fmt.Println(rarities)
+	////
+
+}
+
+func readUserData(filepath string) []ContainerUnlock {
+	data, err := os.ReadFile(filepath)
+	if err != nil {
+		panic(err)
+	}
+
+	var unlocks []ContainerUnlock
+	json.Unmarshal(data, &unlocks)
+	return unlocks
 }
 
 func analyseCaseTypes(unlocks *[]ContainerUnlock) {
@@ -77,6 +94,100 @@ func analyseCaseTypes(unlocks *[]ContainerUnlock) {
 		fmt.Println("You opened", item.key, item.value, "times")
 	}
 }
+
+type Skin struct {
+	Name   string     `json:"name"`
+	Rarity SkinRarity `json:"rarity"`
+}
+
+type SkinRarity struct {
+	Id    string `json:"id"`
+	Name  string `json:"name"`
+	Color string `json:"color"`
+}
+
+func readSkinsJson() []Skin {
+	data, err := os.ReadFile("skins.json")
+	if err != nil {
+		panic(err)
+	}
+
+	var skins []Skin
+	json.Unmarshal(data, &skins)
+	return skins
+}
+
+// example data skins.`json:""`
+// [
+//   {
+//     "id": "skin-e757fd7191f9",
+//     "name": "★ Hand Wraps | Spruce DDPAT",
+//     "description": "Preferred by hand-to-hand fighters, these wraps protect the knuckles and stabilize the wrist when punching. The outer wrap is fabric screen printed with grey digital camo.\\n\\n<i>Some people say they're tough... others show it</i>",
+//     "weapon": {
+//       "id": "leather_handwraps",
+//       "weapon_id": 5032,
+//       "name": "Hand Wraps"
+//     },
+//     "category": {
+//       "id": "sfui_invpanel_filter_gloves",
+//       "name": "Gloves"
+//     },
+//     "pattern": {
+//       "id": "handwrap_camo_grey",
+//       "name": "Spruce DDPAT"
+//     },
+//     "min_float": 0.06,
+//     "max_float": 0.8,
+//     "rarity": {
+//       "id": "rarity_ancient",
+//       "name": "Extraordinary",
+//       "color": "#eb4b4b"
+//     },
+//     "stattrak": false,
+//     "souvenir": false,
+//     "paint_index": "10010",
+//     "wears": [
+//       {
+//         "id": "SFUI_InvTooltip_Wear_Amount_0",
+//         "name": "Factory New"
+//       },
+//       {
+//         "id": "SFUI_InvTooltip_Wear_Amount_1",
+//         "name": "Minimal Wear"
+//       },
+//       {
+//         "id": "SFUI_InvTooltip_Wear_Amount_2",
+//         "name": "Field-Tested"
+//       },
+//       {
+//         "id": "SFUI_InvTooltip_Wear_Amount_3",
+//         "name": "Well-Worn"
+//       },
+//       {
+//         "id": "SFUI_InvTooltip_Wear_Amount_4",
+//         "name": "Battle-Scarred"
+//       }
+//     ],
+//     "collections": [],
+//     "crates": [
+//       {
+//         "id": "crate-4288",
+//         "name": "Glove Case",
+//         "image": "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/weapon_cases/crate_community_15_png.png"
+//       },
+//       {
+//         "id": "crate-4352",
+//         "name": "Operation Hydra Case",
+//         "image": "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/weapon_cases/crate_community_17_png.png"
+//       }
+//     ],
+//     "team": {
+//       "id": "both",
+//       "name": "Both Teams"
+//     },
+//     "legacy_model": false,
+//     "image": "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/default_generated/leather_handwraps_handwrap_camo_grey_light_png.png"
+//   },
 
 // example data
 // [
