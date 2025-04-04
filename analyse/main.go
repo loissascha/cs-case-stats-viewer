@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"slices"
 	"sort"
 	"strings"
 )
@@ -38,14 +37,14 @@ func main() {
 	analyseSkinRarities(&unlocks, &skins)
 
 	// debug: print out all the possible rarities
-	rarities := []string{}
-	for _, skin := range skins {
-		if slices.Contains(rarities, skin.Rarity.Name) {
-			continue
-		}
-		rarities = append(rarities, skin.Rarity.Name)
-	}
-	fmt.Println(rarities)
+	// rarities := []string{}
+	// for _, skin := range skins {
+	// 	if slices.Contains(rarities, skin.Rarity.Name) {
+	// 		continue
+	// 	}
+	// 	rarities = append(rarities, skin.Rarity.Name)
+	// }
+	// fmt.Println(rarities)
 	////
 
 }
@@ -68,8 +67,59 @@ func analyseSkinRarities(unlocks *[]ContainerUnlock, skins *[]Skin) {
 			}
 		}
 	}
-	fmt.Println(gotRarities)
 
+	white := 0
+	lightBlue := 0
+	blue := 0
+	purple := 0
+	pink := 0
+	red := 0
+	gold := 0
+	orange := 0
+
+	for rarity, count := range gotRarities {
+		switch rarity {
+		case "Classified":
+			pink = count
+			break
+		case "Consumer Grad":
+			white = count
+			break
+		case "Covert":
+			red = count
+			break
+		case "Extraordinary":
+			gold = count
+			break
+		case "Industrial Grade":
+			lightBlue = count
+			break
+		case "Mil-Spec Grade":
+			blue = count
+			break
+		case "Restricted":
+			purple = count
+			break
+		case "Contraband":
+			orange = count
+			break
+		}
+	}
+
+	uc := len(*unlocks)
+	printRarityCountAndPercentage("White", white, uc)
+	printRarityCountAndPercentage("Light Blue", lightBlue, uc)
+	printRarityCountAndPercentage("Blue", blue, uc)
+	printRarityCountAndPercentage("Purple", purple, uc)
+	printRarityCountAndPercentage("Pink", pink, uc)
+	printRarityCountAndPercentage("Red", red, uc)
+	printRarityCountAndPercentage("Orange", orange, uc)
+	printRarityCountAndPercentage("Gold", gold, uc)
+}
+
+func printRarityCountAndPercentage(colorText string, count int, maxCount int) {
+	percentage := (float64(count) / float64(maxCount)) * 100
+	fmt.Printf("%s: %v/%v (%.2f%%)\n", colorText, count, maxCount, percentage)
 }
 
 func getSkinRarity(name string, skins *[]Skin) string {
