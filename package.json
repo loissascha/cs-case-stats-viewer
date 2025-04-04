@@ -4,18 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node scraper.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "pkg": {
-    "assets": [
-      "assets/chromium/**/*",
-      "chromium/**/*"
-    ]
-  },
   "dependencies": {
     "@types/node": "^22.14.0",
     "fs": "^0.0.1-security",
