@@ -13,8 +13,10 @@ async function scrapeWebsite() {
         ],
     }); // Set headless to false for debugging
     const page = await browser.newPage();
+    const steamId = process.env.STEAM_ID;
+    console.log("SteamID: " + steamId);
     await page.goto(
-        "https://steamcommunity.com/profiles/76561198080078959/inventoryhistory",
+        `https://steamcommunity.com/profiles/${steamId}/inventoryhistory?l=english`,
     ); // Change this to your target URL
 
     while (true) {

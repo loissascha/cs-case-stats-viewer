@@ -3,3 +3,4 @@ scraper
 scraper.js
 dist/
 unlocked_container.json
+.env
